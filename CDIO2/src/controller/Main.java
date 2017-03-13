@@ -18,9 +18,7 @@ public class Main {
 		//Injecting socket and uiController into mainController - Replace with improved versions...
 		IMainController mainCtrl = new MainController(socketHandler, weightController);
 		//.init and .start could be merged
-		mainCtrl.toString();
 		mainCtrl.start();
-		
 		
 	}
 }

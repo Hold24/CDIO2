@@ -4,7 +4,6 @@ import socket.ISocketController;
 import socket.ISocketObserver;
 import socket.SocketInMessage;
 import socket.SocketOutMessage;
-import weight.Fucker;
 import weight.IWeightInterfaceController;
 import weight.IWeightInterfaceObserver;
 import weight.KeyPress;
@@ -38,7 +37,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			//Starts socketHandler in own thread
 			new Thread(socketHandler).start();
 			//TODO set up weightController - Look above for inspiration (Keep it simple ;))
-			weightController.run();
+			weightController.registerObserver(this);
+			new Thread(weightController).start();
+			
 
 		} 
 		else {
@@ -51,26 +52,34 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notify(SocketInMessage message) {
 		switch (message.getType()) {
 		case B:
+			
 			break;
 		case D:
-			weightController.showMessagePrimaryDisplay(message.getMessage()); 
+			weightController.showMessagePrimaryDisplay(message.getMessage());
 			break;
 		case Q:
+			
 			break;
 		case RM204:
+			
 			break;
 		case RM208:
+			
 			break;
 		case S:
+			
 			break;
 		case T:
+			
 			break;
 		case DW:
+			weightController.showMessagePrimaryDisplay("");
 			break;
 		case K:
 			handleKMessage(message);
 			break;
 		case P111:
+			weightController.showMessageSecondaryDisplay(message.getMessage());
 			break;
 		}
 
@@ -100,50 +109,25 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notifyKeyPress(KeyPress keyPress) {
 
 		//TODO implement logic for handling input from ui
-
+		System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
-			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
 
-			}
-			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
-
-			}
 			break;
 		case TARA:
-			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
-
-			}
-			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
-
-			}
+			
 			break;
 		case TEXT:
-			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
 
-			}
-			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
-
-			}
 			break;
 		case ZERO:
-			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
 
-			}
-			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
-
-			}
 			break;
 		case C:
-			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
 
-			}
-			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
-
-			}
 			break;
 		case EXIT:
-			System.out.println("Fuck you!");
+			
 			break;
 		case SEND:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){

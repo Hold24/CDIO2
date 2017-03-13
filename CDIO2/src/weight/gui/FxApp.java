@@ -41,6 +41,7 @@ public class FxApp extends Application {
 	public static void go(){
 		launch();
 	}
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
