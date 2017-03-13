@@ -12,11 +12,23 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 	private ArrayList<IWeightInterfaceObserver> observers = new ArrayList<IWeightInterfaceObserver>(); 
 	private FxApp fxApp;
 
-	public WeightInterfaceControllerGUI() { instance = this; }
-	@Override public void run() { FxApp.go(); }
-	public static WeightInterfaceControllerGUI getInstance() { return instance; }
-	public void setApp(FxApp fxApp) { this.fxApp = fxApp; fxApp.setSim(this); }
-	
+	public WeightInterfaceControllerGUI() {
+		instance = this;
+	}
+
+	@Override public void run() {
+		FxApp.go();
+	}
+
+	public static WeightInterfaceControllerGUI getInstance() {
+		return instance;
+	}
+
+	public void setApp(FxApp fxApp) {
+		this.fxApp = fxApp; 
+		fxApp.setSim(this);
+	}
+
 
 	// System --> GUI
 	// Methods required by interface
@@ -44,7 +56,7 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 		case UPPER: fxApp.setButtonsUpper(); break;
 		default: fxApp.setButtonsLower(); break;
 		}
-		
+
 	}
 	@Override
 	public void setSoftButtonTexts(String[] texts) {
@@ -56,8 +68,8 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 		Arrays.fill(sftkeysChecked, false);
 		fxApp.softkeysShow(texts, firstSoftkey, sftkeysChecked);
 	}
-	
-	
+
+
 	// GUI --> System
 	public void onSliderValueChange(Double newValue) {
 		for (IWeightInterfaceObserver o : observers) {
@@ -78,7 +90,7 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 		for (IWeightInterfaceObserver o : observers) {
 			o.notifyKeyPress(KeyPress.Tara());
 		}
-		
+
 	}
 	void onSendButtonPressed() {
 		for (IWeightInterfaceObserver o : observers) {
@@ -95,29 +107,29 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 			o.notifyKeyPress(KeyPress.SoftButton(i));
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

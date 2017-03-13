@@ -46,9 +46,9 @@ public class SocketController implements ISocketController {
 			}		
 		} catch (IOException e1) {
 			// TODO Maybe notify MainController?
+			
 			e1.printStackTrace();
 		} 
-
 
 	}
 
@@ -60,7 +60,9 @@ public class SocketController implements ISocketController {
 			String inLine;
 			//.readLine is a blocking call 
 			//TODO How do you handle simultaneous input and output on socket?
+			
 			//TODO this only allows for one open connection - how would you handle multiple connections?
+			
 			while (true){
 				inLine = inStream.readLine();
 				System.out.println(inLine);
@@ -112,6 +114,5 @@ public class SocketController implements ISocketController {
 			socketObserver.notify(message);
 		}
 	}
-
 }
 

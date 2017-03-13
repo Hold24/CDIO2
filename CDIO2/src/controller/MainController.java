@@ -4,6 +4,7 @@ import socket.ISocketController;
 import socket.ISocketObserver;
 import socket.SocketInMessage;
 import socket.SocketOutMessage;
+import weight.Fucker;
 import weight.IWeightInterfaceController;
 import weight.IWeightInterfaceObserver;
 import weight.KeyPress;
@@ -37,9 +38,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			//Starts socketHandler in own thread
 			new Thread(socketHandler).start();
 			//TODO set up weightController - Look above for inspiration (Keep it simple ;))
+			weightController.run();
 
-
-		} else {
+		} 
+		else {
 			System.err.println("No controllers injected!");
 		}
 	}
@@ -96,19 +98,52 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	//Listening for UI input
 	@Override
 	public void notifyKeyPress(KeyPress keyPress) {
+
 		//TODO implement logic for handling input from ui
+
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
+
+			}
+			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
+
+			}
 			break;
 		case TARA:
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
+
+			}
+			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
+
+			}
 			break;
 		case TEXT:
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
+
+			}
+			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
+
+			}
 			break;
 		case ZERO:
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
+
+			}
+			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
+
+			}
 			break;
 		case C:
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ) {
+
+			}
+			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1) ) {
+
+			}
 			break;
 		case EXIT:
+			System.out.println("Fuck you!");
 			break;
 		case SEND:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){

@@ -8,5 +8,4 @@ public interface ISocketController extends Runnable{
 	
 	void sendMessage(SocketOutMessage message);
 
-
 }

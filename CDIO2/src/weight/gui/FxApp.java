@@ -34,7 +34,7 @@ public class FxApp extends Application {
 	private InputType inputType = InputType.NUMBERS;
 	private boolean userInputPlaceholderTentative = false, userInputTypeLocked = false;
 	private int caretPosition = 0;
-	private WeightInterfaceControllerGUI l;
+	private WeightInterfaceControllerGUI wc; 
 	private Timer timer; 
 	final int DELAY = 333;
 
@@ -156,17 +156,17 @@ public class FxApp extends Application {
 	}
 	public FxApp() {} 
 
-	public void setSim(WeightInterfaceControllerGUI l){
-		this.l = l;
+	public void setSim(WeightInterfaceControllerGUI wc){
+		this.wc = wc; 
 	}
 
 
 	//output
-	private void onSliderValueChange(Double newValue){ l.onSliderValueChange(newValue); }
-	private void onExitButtonPressed(){ l.onExitButtonPressed(); }
-	private void onZeroButtonPressed(){ l.onZeroButtonPressed(); }
-	private void onTaraButtonPressed(){ l.onTaraButtonPressed(); }
-	private void onSendButtonPressed(){ l.onSendButtonPressed(); }
+	private void onSliderValueChange(Double newValue){ wc.onSliderValueChange(newValue); }
+	private void onExitButtonPressed(){ wc.onExitButtonPressed(); }
+	private void onZeroButtonPressed(){ wc.onZeroButtonPressed(); }
+	private void onTaraButtonPressed(){ wc.onTaraButtonPressed(); }
+	private void onSendButtonPressed(){ wc.onSendButtonPressed(); }
 	private void onNumBtnPressed(final FxAppInputBtnHandler inputHandler, final int btn) {
 		char c = inputHandler.onButtonPressed(btn, inputType, DELAY);
 		if(timer == null) timer = new Timer();
@@ -178,7 +178,7 @@ public class FxApp extends Application {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				l.onNumBtnPressed(c);
+				wc.onNumBtnPressed(c);
 			}
 		}, DELAY);
 		
@@ -190,7 +190,7 @@ public class FxApp extends Application {
 		userInput.positionCaret(caretPosition);
 	}
 	private void onSoftKeyPressed(int i){
-		l.onSoftBtnPressed(i);
+		wc.onSoftBtnPressed(i);
 	}
 
 	//input
