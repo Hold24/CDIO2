@@ -92,8 +92,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case RM208:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
-				socketHandler.sendMessage(new SocketOutMessage("Type in the weight: "));
-				weight = 
+				socketHandler.sendMessage(new SocketOutMessage("Type in the weight: ")); 
 			}
 			else
 				System.out.println("ES");
