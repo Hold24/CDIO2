@@ -19,6 +19,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
 	private Double weight = 0.0;
+	private boolean sent = false;
 	//	private String regex = "([0-9]+[,]?[0-9]+)"; 
 	//"([0-9]+[,]?[0-9]+)";
 
@@ -92,7 +93,10 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case RM208:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
-				socketHandler.sendMessage(new SocketOutMessage("Type in the weight: ")); 
+				weightController.showMessageSecondaryDisplay("Type in the weight");
+				
+				sent = false;
+				socketHandler.sendMessage(new SocketOutMessage("The weight you typed was: " + weight + " and it has been recieved.\n\r"));
 			}
 			else
 				System.out.println("ES");
@@ -109,7 +113,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case T:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
-				System.out.println("Weight has been tared");
+				socketHandler.sendMessage(new SocketOutMessage("Weight has been tared \n\r"));
 				weightController.showMessagePrimaryDisplay("0.0000 kg");
 				weight = 0.0;
 			}
@@ -132,10 +136,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
 				if (isDouble(message.getMessage())){
 					weightController.showMessageSecondaryDisplay(message.getMessage() + " kg");
-
 				}
 				else
-					System.out.println("Invalid input. Try again.");
+					socketHandler.sendMessage(new SocketOutMessage("Invalid input. Try again. \n\r"));
 			}
 			else
 				System.out.println("ES");
@@ -173,6 +176,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		//		System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
+//			System.out.println(keyPress.getKeyNumber() + " - Number//Character - " + keyPress.getCharacter());
 			
 			break;
 		case TARA:
@@ -184,7 +188,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			}
 			break;
 		case TEXT:
-			
+			double c = keyPress.getCharacter();
+			weight = c;
+			weightController.showMessagePrimaryDisplay(String.valueOf(c-48));
 			break;
 		case ZERO:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
@@ -206,6 +212,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				if (weight > 0) {
 					socketHandler.sendMessage(new SocketOutMessage(weight.toString() + "\n\r"));
 					weightController.showMessagePrimaryDisplay("0.0000 kg");
+					sent = true;
 				}
 				else
 					socketHandler.sendMessage(new SocketOutMessage("Weight is not greater than 0 kg.\n\r"));
