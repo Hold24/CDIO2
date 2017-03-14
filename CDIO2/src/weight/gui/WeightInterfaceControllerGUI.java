@@ -92,6 +92,7 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 		}
 
 	}
+
 	void onSendButtonPressed() {
 		for (IWeightInterfaceObserver o : observers) {
 			o.notifyKeyPress(KeyPress.Send());
@@ -106,30 +107,13 @@ public class WeightInterfaceControllerGUI implements IWeightInterfaceController 
 		for (IWeightInterfaceObserver o : observers) {
 			o.notifyKeyPress(KeyPress.SoftButton(i));
 		}
+
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	void onCButtonPressed() {
+		for (IWeightInterfaceObserver o : observers) {
+			o.notifyKeyPress(KeyPress.C());
+		}
+	}
 
 }

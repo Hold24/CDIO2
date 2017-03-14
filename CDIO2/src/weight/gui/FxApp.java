@@ -26,7 +26,7 @@ public class FxApp extends Application {
 	private Text[] txtinfo = new Text[4];
 	private TextField userInput;
 	private Slider slider;
-	private Button btnexit, btnzero, btntara, btnsend, btnshift; 
+	private Button btnexit, btnzero, btntara, btnsend, btnshift, btnC; 
 	private Button[] btnsft = new Button[6];
 	private Button[] btnnum = new Button[10];
 	public static final String[] str_lower = {".", "abc", "def", "ghi", "jkl", "mno", "pqr", "stu", "vxy", "z"};
@@ -129,6 +129,11 @@ public class FxApp extends Application {
 				@Override public void handle(ActionEvent event) { onSendButtonPressed(); }
 			});
 			
+			btnC = (Button) loader.getNamespace().get("btncancel");
+			btnC.setOnAction(new EventHandler<ActionEvent>() { 
+				@Override public void handle(ActionEvent event) { onCButtonPressed(); }
+			});
+			
 			final FxAppInputBtnHandler inputHandler = new FxAppInputBtnHandler();
 			for(int i=0; i < 10; i++){
 				final int btn = i;
@@ -142,11 +147,7 @@ public class FxApp extends Application {
 			btnshift.setOnAction(new EventHandler<ActionEvent>() {
 				@Override public void handle(ActionEvent event) { onShiftBtnPressed(); }
 			});
-
-			btnzero = (Button) loader.getNamespace().get("btn_zero");
-			btnzero.setOnAction(new EventHandler<ActionEvent>() { 
-				@Override public void handle(ActionEvent event) { onZeroButtonPressed(); }
-			});
+			
 
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -168,6 +169,7 @@ public class FxApp extends Application {
 	private void onZeroButtonPressed(){ wc.onZeroButtonPressed(); }
 	private void onTaraButtonPressed(){ wc.onTaraButtonPressed(); }
 	private void onSendButtonPressed(){ wc.onSendButtonPressed(); }
+	private void onCButtonPressed(){ wc.onCButtonPressed(); }
 	private void onNumBtnPressed(final FxAppInputBtnHandler inputHandler, final int btn) {
 		char c = inputHandler.onButtonPressed(btn, inputType, DELAY);
 		if(timer == null) timer = new Timer();
@@ -190,6 +192,8 @@ public class FxApp extends Application {
 		userInput.requestFocus();
 		userInput.positionCaret(caretPosition);
 	}
+	
+
 	private void onSoftKeyPressed(int i){
 		wc.onSoftBtnPressed(i);
 	}
@@ -275,16 +279,4 @@ public class FxApp extends Application {
 			}
 		});
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 }

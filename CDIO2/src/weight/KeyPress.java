@@ -33,6 +33,10 @@ public class KeyPress {
 	public static KeyPress Character(char character){
 		return new KeyPress(0,character,KeyPressType.TEXT);
 	}
+
+	public static KeyPress C(){
+		return new KeyPress(0,'\\', KeyPressType.C);
+	}
 	
 	private KeyPress(int keyNumber, char character, KeyPressType type){
 		this.keyNumber=keyNumber; this.character=character; this.type=type;
@@ -51,6 +55,6 @@ public class KeyPress {
 	}
 	
 	public enum KeyPressType{
-		SOFTBUTTON, TEXT, EXIT, ZERO, TARA, SEND, C	
+		SOFTBUTTON, TEXT, EXIT, ZERO, TARA, SEND, C
 	}
 }

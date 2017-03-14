@@ -17,7 +17,6 @@ public class SocketController implements ISocketController {
 	private BufferedReader inStream;
 	private DataOutputStream outStream;
 
-
 	@Override
 	public void registerObserver(ISocketObserver observer) {
 		observers.add(observer);
@@ -105,11 +104,12 @@ public class SocketController implements ISocketController {
 					notifyObservers(new SocketInMessage(SocketMessageType.P111, ms));
 					break;
 				case "T": // Tare the weight
-					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.T, "Taring weight..."));
 					
 					break;
 				case "S": // Request the current load
 					//TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.S, "Sending data..."));
 					break;
 				case "K":
 					if (inLine.split(" ").length>1){
@@ -118,15 +118,13 @@ public class SocketController implements ISocketController {
 					break;
 				case "B": // Set the load
 					//TODO implementS
-					
+					notifyObservers(new SocketInMessage(SocketMessageType.B, "Setting new gross weight..."));
 					break;
 				case "Q": // Quit
-					//TODO implement
-//					outStream.writeChars("Java program closed");
-//					System.exit(0);
+					notifyObservers(new SocketInMessage(SocketMessageType.Q, "Closing..."));
 					break;
-				default: //Something went wrong?
-					//TODO implement
+				default: 
+					notifyObservers(new SocketInMessage(SocketMessageType.E, "Wrong command..."));
 					break;
 				}
 			}

@@ -19,6 +19,5 @@ public class Main {
 		IMainController mainCtrl = new MainController(socketHandler, weightController);
 		//.init and .start could be merged
 		mainCtrl.start();
-		
 	}
 }
