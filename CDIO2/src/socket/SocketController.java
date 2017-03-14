@@ -74,11 +74,12 @@ public class SocketController implements ISocketController {
 			
 			while (true){
 				inLine = inStream.readLine();
-				System.out.println(inLine);
+				//System.out.println(inLine);
 				if (inLine==null) break;
 				switch (inLine.split(" ")[0]) {
 				case "RM20": // Display a message in the secondary display and wait for response
 					//TODO implement logic for RM command
+					
 					break;
 				case "D":// Display a message in the primary display
 					//TODO Refactor to make sure that faulty messages doesn't break the system
@@ -105,6 +106,7 @@ public class SocketController implements ISocketController {
 					break;
 				case "T": // Tare the weight
 					//TODO implement
+					
 					break;
 				case "S": // Request the current load
 					//TODO implement
@@ -115,11 +117,13 @@ public class SocketController implements ISocketController {
 					}
 					break;
 				case "B": // Set the load
-					//TODO implement
+					//TODO implementS
+					
 					break;
 				case "Q": // Quit
 					//TODO implement
-					
+//					outStream.writeChars("Java program closed");
+//					System.exit(0);
 					break;
 				default: //Something went wrong?
 					//TODO implement

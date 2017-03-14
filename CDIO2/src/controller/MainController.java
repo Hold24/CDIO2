@@ -39,7 +39,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			//TODO set up weightController - Look above for inspiration (Keep it simple ;))
 			weightController.registerObserver(this);
 			new Thread(weightController).start();
-			
+
 
 		} 
 		else {
@@ -52,25 +52,24 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notify(SocketInMessage message) {
 		switch (message.getType()) {
 		case B:
-			
+
 			break;
 		case D:
 			weightController.showMessagePrimaryDisplay(message.getMessage());
 			break;
 		case Q:
-			
 			break;
 		case RM204:
-			
+
 			break;
 		case RM208:
-			
+
 			break;
 		case S:
-			
+
 			break;
 		case T:
-			
+
 			break;
 		case DW:
 			weightController.showMessagePrimaryDisplay("");
@@ -109,29 +108,41 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notifyKeyPress(KeyPress keyPress) {
 
 		//TODO implement logic for handling input from ui
-		System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
+		//		System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
-
 			break;
 		case TARA:
-			
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
+				socketHandler.sendMessage(new SocketOutMessage("Button inactive"));
+			}
+			else if (keyState.equals(KeyState.K1) || keyState.equals(KeyState.K2)) {
+				
+			}
 			break;
 		case TEXT:
-
 			break;
 		case ZERO:
-
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
+				socketHandler.sendMessage(new SocketOutMessage("Button inactive"));
+			}
+			else if (keyState.equals(KeyState.K1) || keyState.equals(KeyState.K2)) {
+				
+			}
 			break;
 		case C:
-
+			weightController.showMessagePrimaryDisplay("");
+			weightController.showMessageSecondaryDisplay("");
 			break;
 		case EXIT:
-			
+			System.exit(0);
 			break;
 		case SEND:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3) ){
-				socketHandler.sendMessage(new SocketOutMessage("K A 3"));
+				socketHandler.sendMessage(new SocketOutMessage("Button inactive"));
+			}
+			else if (keyState.equals(KeyState.K2) || keyState.equals(KeyState.K1)) {
+				
 			}
 			break;
 		}
