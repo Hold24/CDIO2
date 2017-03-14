@@ -32,12 +32,12 @@ public class SocketController implements ISocketController {
 		if (outStream!=null){
 			//TODO send something over the socket! 
 
-			try {
-				outStream.writeChars(message.getMessage());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				outStream.writeChars(message.getMessage());
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			
 		} else {
 			//TODO maybe tell someone that connection is closed?
@@ -82,12 +82,7 @@ public class SocketController implements ISocketController {
 					break;
 				case "D":// Display a message in the primary display
 					//TODO Refactor to make sure that faulty messages doesn't break the system
-					String msg = "";
-					for(int i = 0; i < inLine.split(" ").length - 1; i++){
-						msg += inLine.split(" ")[i + 1];
-						msg += " ";
-					}
-					notifyObservers(new SocketInMessage(SocketMessageType.D, msg)); 			
+					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1])); 			
 					break;
 				case "DW": //Clear primary display
 					//TODO implement
@@ -96,12 +91,7 @@ public class SocketController implements ISocketController {
 					break;
 				case "P111": //Show something in secondary display
 					//TODO implement
-					String ms = "";
-					for(int i = 0; i < inLine.split(" ").length - 1; i++){
-						ms += inLine.split(" ")[i + 1];
-						ms += " ";
-					}
-					notifyObservers(new SocketInMessage(SocketMessageType.P111, ms));
+					notifyObservers(new SocketInMessage(SocketMessageType.P111, inLine.split(" ")[1]));
 					break;
 				case "T": // Tare the weight
 					notifyObservers(new SocketInMessage(SocketMessageType.T, "Taring weight..."));
