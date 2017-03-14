@@ -38,10 +38,10 @@ public class SocketController implements ISocketController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		} else {
 			//TODO maybe tell someone that connection is closed?
-			
+
 		}
 	}
 
@@ -54,7 +54,7 @@ public class SocketController implements ISocketController {
 			}		
 		} catch (IOException e1) {
 			// TODO Maybe notify MainController?
-			
+
 			e1.printStackTrace();
 		} 
 
@@ -68,17 +68,23 @@ public class SocketController implements ISocketController {
 			String inLine;
 			//.readLine is a blocking call 
 			//TODO How do you handle simultaneous input and output on socket?
-			
+
 			//TODO this only allows for one open connection - how would you handle multiple connections?
-			
+
 			while (true){
 				inLine = inStream.readLine();
 				//System.out.println(inLine);
 				if (inLine==null) break;
 				switch (inLine.split(" ")[0]) {
 				case "RM20": // Display a message in the secondary display and wait for response
-					//TODO implement logic for RM command
-					
+					outStream.writeChars("Type in either "+"RM204"+" or + " +"RM208 \n\r");
+					inLine = inStream.readLine();
+					if (inLine.equals("RM204"))
+						notifyObservers(new SocketInMessage(SocketMessageType.RM204, "RM204"));
+					else if (inLine.equals("RM208"))
+						notifyObservers(new SocketInMessage(SocketMessageType.RM208, "RM208"));
+					else
+						outStream.writeChars("Invalid input. Try again.");
 					break;
 				case "D":// Display a message in the primary display
 					//TODO Refactor to make sure that faulty messages doesn't break the system
@@ -105,7 +111,7 @@ public class SocketController implements ISocketController {
 					break;
 				case "T": // Tare the weight
 					notifyObservers(new SocketInMessage(SocketMessageType.T, "Taring weight..."));
-					
+
 					break;
 				case "S": // Request the current load
 					//TODO implement
