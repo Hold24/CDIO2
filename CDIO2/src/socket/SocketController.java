@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.SocketHandler;
 
 import socket.SocketInMessage.SocketMessageType;
 
@@ -30,8 +32,8 @@ public class SocketController implements ISocketController {
 	@Override
 	public void sendMessage(SocketOutMessage message) {
 		if (outStream!=null){
-			//TODO send something over the socket! 
-
+//			//TODO send something over the socket! 
+//
 			try {
 				outStream.writeBytes(message.getMessage()); //Vi har tidligere brugt writeChars
 			} catch (IOException e) {
