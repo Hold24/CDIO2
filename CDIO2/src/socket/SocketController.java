@@ -33,7 +33,7 @@ public class SocketController implements ISocketController {
 			//TODO send something over the socket! 
 
 			try {
-				outStream.writeChars(message.getMessage());
+				outStream.writeBytes(message.getMessage()); //Vi har tidligere brugt writeChars
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
