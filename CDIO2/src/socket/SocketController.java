@@ -35,7 +35,7 @@ public class SocketController implements ISocketController {
 			try {
 				outStream.writeBytes(message.getMessage()); //Vi har tidligere brugt writeChars
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 			}
 
@@ -77,27 +77,24 @@ public class SocketController implements ISocketController {
 				//System.out.println(inLine);
 				if (inLine==null) break;
 				switch (inLine.split(" ")[0]) {
-				case "RM20": // Display a message in the secondary display and wait for response
-					outStream.writeChars("Type in either "+"RM204"+" or + " +"RM208 \n\r");
-					inLine = inStream.readLine();
-					if (inLine.equals("RM204"))
-						notifyObservers(new SocketInMessage(SocketMessageType.RM204, "RM204"));
-					else if (inLine.equals("RM208"))
-						notifyObservers(new SocketInMessage(SocketMessageType.RM208, "RM208"));
-					else
-						outStream.writeChars("Invalid input. Try again.");
+				case "RM208": // Display a message in the secondary display and wait for response
+					//outStream.writeChars("Type in RM208 \n\r");
+					//inLine = inStream.readLine();
+
+					
+						notifyObservers(new SocketInMessage(SocketMessageType.RM208, inLine.split("RM208") [1]));
+					
+						//outStream.writeChars("Invalid input. Try again.");
 					break;
 				case "D":// Display a message in the primary display
 					//TODO Refactor to make sure that faulty messages doesn't break the system
-					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1])); 			
+					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(".")[1])); 			
 					break;
 				case "DW": //Clear primary display
-					//TODO implement
 					String regex = "([\\W])*\\w";
 					notifyObservers(new SocketInMessage(SocketMessageType.DW, inLine.replaceAll(regex, "")));
 					break;
 				case "P111": //Show something in secondary display
-					//TODO implement
 					notifyObservers(new SocketInMessage(SocketMessageType.P111, inLine.split(" ")[1]));
 					break;
 				case "T": // Tare the weight
@@ -105,7 +102,6 @@ public class SocketController implements ISocketController {
 
 					break;
 				case "S": // Request the current load
-					//TODO implement
 					notifyObservers(new SocketInMessage(SocketMessageType.S, "Sending data..."));
 					break;
 				case "K":
@@ -115,7 +111,7 @@ public class SocketController implements ISocketController {
 					break;
 				case "B": // Set the load
 					//TODO implementS
-					notifyObservers(new SocketInMessage(SocketMessageType.B, "Setting new gross weight..."));
+					notifyObservers(new SocketInMessage(SocketMessageType.B, inLine.split(" ")[1])); 
 					break;
 				case "Q": // Quit
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, "Closing..."));

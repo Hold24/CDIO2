@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		final int PORT = 8000;
 		final String address = "localhost";
 		BufferedReader inFromServer = null;
@@ -37,10 +37,10 @@ public class Main {
 			socket.close();			
 			
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		
