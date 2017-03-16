@@ -24,10 +24,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private String currentDisplay = "";
 	private boolean sent = false;
 
-	//	private String regex = "([0-9]+[,]?[0-9]+)"; 
-	//"([0-9]+[,]?[0-9]+)";
-
-
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
 	}
@@ -48,8 +44,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			//TODO set up weightController - Look above for inspiration (Keep it simple ;))
 			weightController.registerObserver(this);
 			new Thread(weightController).start();
-
-
 		} 
 		else {
 			System.err.println("No controllers injected!");
@@ -99,13 +93,15 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				double startTime = System.currentTimeMillis();
 				double tempWeight = weight;
 				boolean noRegisteredWeight = false;
-				while (!sent) {
-					
-					if (tempWeight != weight || System.currentTimeMillis() - startTime > 20000) {
-						if (System.currentTimeMillis() - startTime > 20000) //Lidt kludret, men virker :-)
-							noRegisteredWeight = true;
-						sent = true;
+				boolean test = false;
+				
+				while (test == false) {
+				test = this.getSent();
+					if (System.currentTimeMillis() - startTime > 20000) {//Lidt kludret, men virker :-)
+						noRegisteredWeight = true;
+						break;
 					}
+					System.out.println("Hejsa");
 				}
 				if (noRegisteredWeight) {
 					socketHandler.sendMessage(new SocketOutMessage("Input was not recieved.\n\r"));
@@ -148,7 +144,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessageSecondaryDisplay("");
 				currentDisplay = "";
 				weight = 0.0;
-
 			}
 			else
 				System.out.println("ES");
@@ -168,7 +163,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				System.out.println("ES");
 			break;
 		default:
-			System.out.println("Wrong Command");
+			System.out.println(message.getMessage());
 			break;
 		}
 	}
@@ -192,12 +187,12 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		}
 	}
+
 	//Listening for UI input
 	@Override
 	public void notifyKeyPress(KeyPress keyPress) {
 
-		//TODO implement logic for handling input from ui
-		//		System.out.println(keyPress.getCharacter() + " +- " + keyPress.getKeyNumber());
+		//TODO implement logic for handling input from UI
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
 			break;
@@ -263,7 +258,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.exit(0);
 			break;
 		case SEND:
-			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {	
+			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
 				if (weight > 0) {
 					socketHandler.sendMessage(new SocketOutMessage("The weight has been recived...\n\r" + weight.toString() + " Kg" + "\n\r"));
 					weightController.showMessagePrimaryDisplay("0.0000 kg");
@@ -278,13 +273,14 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		}
 	}
-
+	
 	@Override
 	public void notifyWeightChange(double newWeight) {
 		weight = newWeight;
 
 		weightController.showMessagePrimaryDisplay(Double.toString(newWeight));
 	}
+
 	/**
 	 * @author Sammy Masoule
 	 * 
@@ -298,5 +294,19 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+	/**
+	 * @author Mads Finnerup 
+	 * 
+	 * @desc Since you cant cross cases, this will do it for you....
+	 */
+	private boolean getSent() {
+		
+		if (sent){
+			return true;}
+		
+		else {
+			return false;
+		}	
 	}
 }
