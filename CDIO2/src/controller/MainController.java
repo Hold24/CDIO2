@@ -88,8 +88,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case RM208:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {	
 				//				weightController.showMessageSecondaryDisplay(message.getMessage());		
-				socketHandler.sendMessage(new SocketOutMessage("Place object on the weight.\n\r"));
+				socketHandler.sendMessage(new SocketOutMessage("Place object on the weight. Specify it´s weight. You have 20 seconds to do so. \n\r"));
 				weightController.showMessageSecondaryDisplay("Place object on the weight.");
+				
 				double startTime = System.currentTimeMillis();
 				double tempWeight = weight;
 				boolean noRegisteredWeight = false;
@@ -101,7 +102,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 						noRegisteredWeight = true;
 						break;
 					}
-					System.out.println("Hejsa");
 				}
 				if (noRegisteredWeight) {
 					socketHandler.sendMessage(new SocketOutMessage("Input was not recieved.\n\r"));

@@ -38,6 +38,7 @@ public class SocketController implements ISocketController {
 			//
 			try {
 				outStream.writeBytes(message.getMessage()); //Vi har tidligere brugt writeChars
+				
 			} catch (IOException e) {
 
 				e.printStackTrace();
