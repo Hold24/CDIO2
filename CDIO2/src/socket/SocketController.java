@@ -83,21 +83,21 @@ public class SocketController implements ISocketController {
 					//outStream.writeChars("Type in RM208 \n\r");
 					//inLine = inStream.readLine();
 
-					
-						notifyObservers(new SocketInMessage(SocketMessageType.RM208, inLine.split("RM208") [1]));
+//						notifyObservers(new SocketInMessage(SocketMessageType.RM208, inLine.split("RM208 ") [1]));
+						notifyObservers(new SocketInMessage(SocketMessageType.RM208, "RM208..."));
 					
 						//outStream.writeChars("Invalid input. Try again.");
 					break;
 				case "D":// Display a message in the primary display
 					//TODO Refactor to make sure that faulty messages doesn't break the system
-					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(".")[1])); 			
+					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split("D ")[1])); 			
 					break;
 				case "DW": //Clear primary display
 					String regex = "([\\W])*\\w";
 					notifyObservers(new SocketInMessage(SocketMessageType.DW, inLine.replaceAll(regex, "")));
 					break;
 				case "P111": //Show something in secondary display
-					notifyObservers(new SocketInMessage(SocketMessageType.P111, inLine.split(" ")[1]));
+					notifyObservers(new SocketInMessage(SocketMessageType.P111, inLine.split("P111 ")[1]));
 					break;
 				case "T": // Tare the weight
 					notifyObservers(new SocketInMessage(SocketMessageType.T, "Taring weight..."));
