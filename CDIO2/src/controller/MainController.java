@@ -1,6 +1,9 @@
 package controller;
 
+import java.io.InputStream;
 import java.util.regex.Pattern;
+
+import com.sun.xml.internal.ws.resources.SenderMessages;
 
 import socket.ISocketController;
 import socket.ISocketObserver;
@@ -23,6 +26,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private Double weight = 0.0, taraWeight = 0.0;
 	private String currentDisplay = "";
 	private boolean sent = false;
+	private String tester = "";
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -60,7 +64,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessageSecondaryDisplay(message.getMessage());
 				if (isDouble(message.getMessage()))
 					weight = Double.parseDouble(message.getMessage());
-				socketHandler.sendMessage(new SocketOutMessage("Input has been accepted. \n\r"));
+				socketHandler.sendMessage(new SocketOutMessage("Input: " + message.getMessage() + " has been accepted. \n\r"));
 			}
 			else
 				System.out.println("ES");
@@ -71,13 +75,14 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessageSecondaryDisplay(message.getMessage());
 				if (isDouble(message.getMessage()))
 					weight = Double.parseDouble(message.getMessage());
-				socketHandler.sendMessage(new SocketOutMessage("Input has been accepted. \n\r"));
+				socketHandler.sendMessage(new SocketOutMessage("Input: " + message.getMessage() + " has been accepted. \n\r"));
 			}
 			else
 				System.out.println("ES");
 			break;
 		case Q:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
+				socketHandler.sendMessage(new SocketOutMessage("Input: " + message.getMessage() + " has been accepted. \n\r"));
 				System.exit(0);
 			}
 			else
@@ -87,33 +92,21 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case RM208:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {	
-				//				weightController.showMessageSecondaryDisplay(message.getMessage());		
-				socketHandler.sendMessage(new SocketOutMessage("Place object on the weight. Specify it´s weight. You have 20 seconds to do so. \n\r"));
-				weightController.showMessageSecondaryDisplay("Place object on the weight.");
-				
-				double startTime = System.currentTimeMillis();
-				double tempWeight = weight;
-				boolean noRegisteredWeight = false;
-				boolean test = false;
-				
-				while (test == false) {
-				test = this.getSent();
-					if (System.currentTimeMillis() - startTime > 20000) {//Lidt kludret, men virker :-)
-						noRegisteredWeight = true;
-						break;
+
+				socketHandler.sendMessage(new SocketOutMessage("Command received. \n\r"));
+				weightController.showMessageSecondaryDisplay(message.getMessage());
+				synchronized(this) {
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-				if (noRegisteredWeight) {
-					socketHandler.sendMessage(new SocketOutMessage("Input was not recieved.\n\r"));
-					weightController.showMessageSecondaryDisplay("No object was registered.");
-					sent = false;
-					break;
-				}
-				socketHandler.sendMessage(new SocketOutMessage("Input was recieved.\n\r"));
-				weightController.showMessageSecondaryDisplay("Weight has been recived");
-				sent = false;
+				weightController.showMessagePrimaryDisplay(message.getMessage());
+
 			}
-			else
+			else 
 				System.out.println("ES");
 			break;
 		case S:
@@ -144,17 +137,20 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				weightController.showMessageSecondaryDisplay("");
 				currentDisplay = "";
 				weight = 0.0;
+				socketHandler.sendMessage(new SocketOutMessage("Weight cleared. \n\r"));
 			}
 			else
 				System.out.println("ES");
 			break;
 		case K:
 			handleKMessage(message);
+			socketHandler.sendMessage(new SocketOutMessage("Input: " + message.getMessage() + " has been accepted. \n\r"));
 			break;
 		case P111:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
 				if (isDouble(message.getMessage())){
 					weightController.showMessageSecondaryDisplay(message.getMessage() + " kg");
+					socketHandler.sendMessage(new SocketOutMessage("Input: " + message.getMessage() + " has been accepted. \n\r"));
 				}
 				else
 					socketHandler.sendMessage(new SocketOutMessage("Invalid input. Try again. \n\r"));
@@ -201,7 +197,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 				socketHandler.sendMessage(new SocketOutMessage("Button inactive\n\r"));
 			}
 			else if (keyState.equals(KeyState.K1) || keyState.equals(KeyState.K2)) {
-				if (weight > 0) {
+				if (weight > 0 && tester != "RM208") {
 					taraWeight = weight;
 					weight = 0.0;
 					weightController.showMessagePrimaryDisplay("0.0000 kg");
@@ -259,12 +255,16 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case SEND:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
-				if (weight > 0) {
+				if (weight > 0 && tester != "RM208") {
 					socketHandler.sendMessage(new SocketOutMessage("The weight has been recived...\n\r" + weight.toString() + " Kg" + "\n\r"));
 					weightController.showMessagePrimaryDisplay("0.0000 kg");
 					currentDisplay = "";
+				}
+				else if (weight > 0) {
+					currentDisplay = "";
 					sent = true;
 				}
+
 				else
 					socketHandler.sendMessage(new SocketOutMessage("Weight is not greater than 0 kg.\n\r"));
 			}
@@ -273,7 +273,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		}
 	}
-	
+
 	@Override
 	public void notifyWeightChange(double newWeight) {
 		weight = newWeight;
@@ -295,18 +295,14 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			return false;
 		}
 	}
-	/**
-	 * @author Mads Finnerup 
-	 * 
-	 * @desc Since you cant cross cases, this will do it for you....
-	 */
+
 	private boolean getSent() {
-		
-		if (sent){
+		if (sent == true){
 			return true;}
-		
 		else {
 			return false;
-		}	
-	}
+		}
+
+
+	} 
 }

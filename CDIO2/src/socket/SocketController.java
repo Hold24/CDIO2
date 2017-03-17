@@ -38,12 +38,9 @@ public class SocketController implements ISocketController {
 			//
 			try {
 				outStream.writeBytes(message.getMessage()); //Vi har tidligere brugt writeChars
-				
 			} catch (IOException e) {
-
 				e.printStackTrace();
 			}
-
 
 		} else {
 			//TODO maybe tell someone that connection is closed?
@@ -54,106 +51,14 @@ public class SocketController implements ISocketController {
 	@Override
 	public void run() {
 		//TODO some logic for listening to a socket //(Using try with resources for auto-close of socket)
-		notifyObservers(new SocketInMessage(SocketMessageType.E, "Do you want to change the Port nr.? Default Port nr. is 8000."));
-		createSocketTest();
-	}
-
-	private void createSocketTest() {
-		
-		String ans;
-		boolean ans2 = true;
-		do {
-			ans = keyb.nextLine().toLowerCase();
-			if(!ans.equals("yes") && !ans.equals("no")) notifyObservers(new SocketInMessage(SocketMessageType.E, "Invalid input. Do you want to change the Port nr.? yes/no?"));
-			else if(ans.equals("yes") || ans.equals("no")) break;
-		} while(true);
-		if(ans.equals("yes")){
-			ans2 = true;
-			notifyObservers(new SocketInMessage(SocketMessageType.E, "Choose a Port nr. between 1024-49151."));
-			do {
-				ans = keyb.nextLine();
-				if (Integer.parseInt(ans) < 1024 || Integer.parseInt(ans) > 49151) notifyObservers(new SocketInMessage(SocketMessageType.E, "Invalid port number. Try Again."));;
-			} while (Integer.parseInt(ans) < 1024 || Integer.parseInt(ans) > 49151);
-			notifyObservers(new SocketInMessage(SocketMessageType.E, "You chose the Port nr: " + Integer.parseInt(ans) + "\n\rPort nr. has been recieved. Creating Socket..."));
-		}
-		else if(ans.equals("no"))
-			notifyObservers(new SocketInMessage(SocketMessageType.E, "You chose the default Port nr: " + Port + "\n\rPort nr. has been recieved. Creating Socket..."));
-			ans2 = false;
-		keyb.close();
-		try (ServerSocket listeningSocket = new ServerSocket(ans2 ? Integer.parseInt(ans) : Port)){ 
+		try (ServerSocket listeningSocket = new ServerSocket(Port)){ 
 			while (true){
-				waitForConnections(listeningSocket); 	
-			}		
-		} catch (IOException e1) {
-			notifyObservers(new SocketInMessage(SocketMessageType.E, "Couldnt connect socket... recommending to restart program..."));
-			e1.printStackTrace();
-		}
-	}
-
-	/**
-	 * @author Niklas Thielemann
-	 * @desc This method is used to manipulate the Port nr.
-	 */
-	private void createSocket() {
-		Scanner keyb = new Scanner(System.in);
-		do {
-			String ans = keyb.nextLine().toLowerCase();
-			if (ans.equals("yes")) {
-				notifyObservers(new SocketInMessage(SocketMessageType.E, "Choose a Port nr. between 1024-49151."));
-				String str;
-				int a = 0;
-				do {
-					str = keyb.nextLine();
-					try{
-						a = Integer.parseInt(str);
-					} catch (NumberFormatException ne) {
-					}
-					if (a < 1024 || a > 49151)
-						notifyObservers(new SocketInMessage(SocketMessageType.E, "Invalid Port nr. Try again. (Port nr. minimum 1024, and maximum 49151)"));
-				} while (a < 1024 || a > 49151);
-				notifyObservers(new SocketInMessage(SocketMessageType.E, "You chose the Port nr: " + a + "\n\rPort nr. has been recieved. Creating Socket..."));
-				try (ServerSocket listeningSocket = new ServerSocket(a)){ 
-					while (true){
-						waitForConnections(listeningSocket); 	
-					}		
-				} catch (IOException e1) {
-					notifyObservers(new SocketInMessage(SocketMessageType.E, "Couldnt connect socket... recommending to restart program..."));
-					e1.printStackTrace();
-				} 
-				break;
+				waitForConnections(listeningSocket); 
 			}
-			else if (ans.equals("no")) {
-				try (ServerSocket listeningSocket = new ServerSocket(Port)){ 
-					while (true){
-						waitForConnections(listeningSocket); 	
-					}		
-				} catch (IOException e1) {
-					notifyObservers(new SocketInMessage(SocketMessageType.E, "Couldnt connect socket... recommending to restart program..."));
-					e1.printStackTrace();
-				}
-				break;
-			}
-			else
-				notifyObservers(new SocketInMessage(SocketMessageType.E, "Invalid input. Do you want to change the Port nr.? yes/no?"));
-		} while(true);
-		keyb.close();
-	}
-
-	/**
-	 * @author Niklas Broch Thielemann
-	 * @desc used to create Socket based on Port nr. The parameter a, is the port number used for the socket.
-	 * @param a
-	 */
-	private void createSocket(int a) {
-		try (ServerSocket listeningSocket = new ServerSocket(a)){ 
-			while (true){
-				waitForConnections(listeningSocket); 	
-			}		
-		} catch (IOException e1) {
-			// TODO Maybe notify MainController?
-			notifyObservers(new SocketInMessage(SocketMessageType.E, "Couldnt connect socket... recommending to restart program..."));
-			e1.printStackTrace();
-		}
+			} catch (IOException e1) {
+				notifyObservers(new SocketInMessage(SocketMessageType.E, "Couldnt connect socket... recommending to restart program..."));
+				e1.printStackTrace();
+			}	
 	}
 
 	private void waitForConnections(ServerSocket listeningSocket) {
@@ -174,9 +79,8 @@ public class SocketController implements ISocketController {
 				if (inLine==null) break;
 				switch (inLine.split(" ")[0]) {
 				case "RM208": // Display a message in the secondary display and wait for response
-
 					//						notifyObservers(new SocketInMessage(SocketMessageType.RM208, inLine.split("RM208 ") [1]));
-					notifyObservers(new SocketInMessage(SocketMessageType.RM208, "RM208..."));
+					notifyObservers(new SocketInMessage(SocketMessageType.RM208, inLine));
 					//outStream.writeChars("Invalid input. Try again.");
 					break;
 				case "D":// Display a message in the primary display
